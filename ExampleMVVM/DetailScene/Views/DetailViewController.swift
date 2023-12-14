@@ -27,6 +27,7 @@ class DetailViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.font = UIFont.boldSystemFont(ofSize: 14)
         return label
     }()
