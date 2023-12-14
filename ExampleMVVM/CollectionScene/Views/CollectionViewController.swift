@@ -10,15 +10,15 @@ import UIKit
 final class CollectionViewController: UICollectionViewController, FlowControllerProtocol {
     
     private let activityIndicator = UIActivityIndicatorView()
-    let layout = UICollectionViewFlowLayout()
+    private let layout = UICollectionViewFlowLayout()
     
     var viewModel: CollectionViewModel?
     var completionHandler: ((ShortImageData) -> (Void))?
-    var cellDataSourse = [ShortImageData]()
+    var cellDataSourse = [CellViewModel]()
     
     init(_ viewModel: CollectionViewModel) {
         self.viewModel = viewModel
-        super.init(collectionViewLayout: layout)
+        super.init(collectionViewLayout: layout.calculateCollectionViewLayout())
     }
     
     required init?(coder: NSCoder) {

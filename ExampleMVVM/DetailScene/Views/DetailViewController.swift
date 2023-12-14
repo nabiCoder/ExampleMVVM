@@ -9,7 +9,12 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
+    var viewModel: DetailViewModel?
     
+    init(_ viewModel: DetailViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
     
     let imageView: UIImageView = {
         let imageView = UIImageView()
@@ -26,11 +31,6 @@ class DetailViewController: UIViewController {
         return label
     }()
     
-    init(dataImage: ShortImageData) {
-        print(dataImage)
-        super.init(nibName: nil, bundle: nil)
-    }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -38,11 +38,18 @@ class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         setupConstraints()
-        
+        bindViewModel()
     }
     
-    
-    
+    private func bindViewModel() {
+        
+        viewModel?.cellDataSource.bind({ [weak self] shortImageData in
+            guard let self, let shortImageData else { return }
+            
+            imageView.image = shortImageData.image
+            titleLabel.text = shortImageData.title
+        })
+    }
 }
-

@@ -11,16 +11,13 @@ import UIKit
 extension CollectionViewController {
     
     func reloadCollectionView() {
+        
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
     }
     
     func setupCollection() {
-        
-        layout.itemSize = CGSize(width: 90, height: 90)
-        layout.sectionInset.left = 25
-        layout.sectionInset.right = 25
         
         collectionView.register(CollectionViewCell.self,
                                 forCellWithReuseIdentifier: CollectionViewCell.identifier)
@@ -42,27 +39,31 @@ extension CollectionViewController {
         
         (viewModel?.numberOfSections())!
     }
-
-    override func collectionView(_ collectionView: UICollectionView, 
-                                 numberOfItemsInSection section: Int) -> Int {
     
+    override func collectionView(_ collectionView: UICollectionView,
+                                 numberOfItemsInSection section: Int) -> Int {
+        
         (viewModel?.numberOfRows(in: section))!
     }
-
-    override func collectionView(_ collectionView: UICollectionView, 
+    
+    override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.identifier,
                                                             for: indexPath) as? CollectionViewCell else {
             return UICollectionViewCell()
         }
-    
-        print(cellDataSourse)
-    
+        
+        let cellViewModel = cellDataSourse[indexPath.item]
+        cell.configureCell(cellViewModel)
+        
         return cell
     }
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    
+        
+        guard let shortImageData = viewModel?.dataSource else { return }
+        print(shortImageData)
+        completionHandler!(shortImageData[indexPath.item])
     }
 }
 

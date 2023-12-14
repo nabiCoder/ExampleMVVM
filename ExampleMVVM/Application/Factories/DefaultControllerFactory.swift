@@ -14,8 +14,8 @@ class DefaultControllerFactory {
         CollectionViewController(viewModel)
     }
     
-    func createDetailViewController(_ dataImage: ShortImageData) -> DetailViewController {
+    func createDetailViewController(_ viewModel: DetailViewModel) -> DetailViewController {
         
-        DetailViewController(dataImage: dataImage)
+        DetailViewController(viewModel)
     }
 }

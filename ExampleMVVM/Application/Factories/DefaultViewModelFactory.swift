@@ -14,8 +14,8 @@ class DefaultViewModelFactory {
         CollectionViewModel(imageCacheService)
     }
     
-    func createDetailViewModel() -> DetailViewModel {
+    func createDetailViewModel(_ shortImageData: ShortImageData) -> DetailViewModel {
         
-        DetailViewModel()
+        DetailViewModel(cellDataSource: shortImageData)
     }
 }

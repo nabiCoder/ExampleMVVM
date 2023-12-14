@@ -8,6 +8,13 @@
 import UIKit
 
 extension DetailViewController {
+    
+    func setupView() {
+        view.backgroundColor = .white
+        view.addSubview(imageView)
+        view.addSubview(titleLabel)
+    }
+    
     func setupConstraints() {
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),

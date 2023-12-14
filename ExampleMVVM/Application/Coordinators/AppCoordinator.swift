@@ -29,16 +29,18 @@ class AppCoordinator: CoordinatorProtocol {
         
         let controller = controllerFactory.createMainScreenController(viewModel)
         controller.completionHandler = { [weak self] value in
+            print(value)
             self?.showDetailScreen(value)
         }
         
         navigationController.pushViewController(controller, animated: true)
     }
     
-    private func showDetailScreen(_ data: ShortImageData) {
+    private func showDetailScreen(_ shortImageData: ShortImageData) {
         
-        let controller = controllerFactory.createDetailViewController(data)
-        //controller.viewModel = viewModelFactory.createDetailViewModel()
+        let viewModel = viewModelFactory.createDetailViewModel(shortImageData)
+        
+        let controller = controllerFactory.createDetailViewController(viewModel)
         
         navigationController.pushViewController(controller, animated: true)
     }

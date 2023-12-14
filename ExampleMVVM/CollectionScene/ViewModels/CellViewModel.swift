@@ -8,18 +8,18 @@
 import UIKit
 
 protocol CellViewModelProtocol: AnyObject {
-    var image: String { get }
+    var image: UIImage { get }
     var title: String { get }
 }
 
 class CellViewModel: CellViewModelProtocol {
     
-    var image: String
+    var image: UIImage
     
     var title: String
     
-    init(_ imageData: ImageData) {
-        self.image = imageData.url
+    init(_ imageData: ShortImageData) {
+        self.image = imageData.image
         self.title = imageData.title
     }
 }

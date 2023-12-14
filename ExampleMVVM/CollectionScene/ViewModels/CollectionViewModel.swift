@@ -20,7 +20,7 @@ protocol CollectionDataLoader: AnyObject {
 protocol CollectionViewModelProtocol: CollectionDataProvider, CollectionDataLoader {
     var isLoading: Observable<Bool> { get set }
     var dataSource: [ShortImageData]? { get set }
-    var cellDataSource: Observable<[ShortImageData]> { get set }
+    var cellDataSource: Observable<[CellViewModel]> { get set }
 }
 
 class CollectionViewModel: CollectionViewModelProtocol {
@@ -41,7 +41,7 @@ class CollectionViewModel: CollectionViewModelProtocol {
     
     var isLoading: Observable<Bool> = Observable(value: false)
     var dataSource: [ShortImageData]?
-    var cellDataSource: Observable<[ShortImageData]> = Observable(value: nil)
+    var cellDataSource: Observable<[CellViewModel]> = Observable(value: nil)
     
     func fetchImages() {
         isLoading.value = true
@@ -62,7 +62,8 @@ class CollectionViewModel: CollectionViewModelProtocol {
         
         group.notify(queue: .main) {
             self.isLoading.value = false
-            self.cellDataSource.value = images
+            self.dataSource = images
+            self.cellDataSource.value = images.compactMap({ CellViewModel($0) })
         }
     }
 }

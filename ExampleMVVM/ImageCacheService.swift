@@ -20,11 +20,11 @@ class ImageCacheService: ImageCaching {
         let key = NSNumber(value: id)
         
         if let cachedObject = cache.object(forKey: key) {
-            let url = cachedObject.imageData.url
+            let image = cachedObject.imageData.image
             let title = cachedObject.imageData.title
             
-            completion(ShortImageData(title: title, url: url))
-        } else { 
+            completion(ShortImageData(title: title, image: image))
+        } else {
             NetworkDataFetch.shared.fetchImage(id: id) { [weak self] image, error in
                 guard let self = self else { return }
                 
@@ -32,21 +32,40 @@ class ImageCacheService: ImageCaching {
                     
                     guard let url = URL(string: image.url) else { return }
                     let title = image.title
-                    
-                    let imageData = ShortImageData(title: title, url: url)
-                    let imageDataWrapper = ImageDataWrapper(imageData)
-                    self.cache.setObject(imageDataWrapper, forKey: key)
-                    
-                    // Создаем ShortImageData
-                    let shortImageData = ShortImageData(title: imageData.title, url: imageData.url)
-                    completion(shortImageData)
+                    self.downloadImage(url: url) { downloadedImage in
+                        guard let downloadedImage = downloadedImage else {
+                            print("Error downloading image")
+                            completion(nil)
+                            return
+                        }
+                        
+                        let imageData = ShortImageData(title: title, image: downloadedImage)
+                        let imageDataWrapper = ImageDataWrapper(imageData)
+                        self.cache.setObject(imageDataWrapper, forKey: key)
+                        
+                        // Создаем ShortImageData
+                        let shortImageData = ShortImageData(title: imageData.title, image: imageData.image)
+                        completion(shortImageData)
+                    }
                 } else {
-                    // Обработка ошибки загрузки изображения
+                    
                     print("Error loading image: \(error?.localizedDescription ?? "Unknown error")")
                     completion(nil)
                 }
             }
         }
+    }
+    private func downloadImage(url: URL, completion: @escaping (UIImage?) -> Void) {
+        let task = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(nil)
+                return
+            }
+            
+            let image = UIImage(data: data)
+            completion(image)
+        }
+        task.resume()
     }
 }
 

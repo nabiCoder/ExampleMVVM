@@ -30,7 +30,7 @@ class CollectionViewCell: UICollectionViewCell {
     }
     
     func configureCell(_ viewModel: CellViewModel) {
-
+        imageView.image = viewModel.image
     }
 }
 
