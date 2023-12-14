@@ -19,6 +19,7 @@ extension CollectionViewController {
     
     func setupCollection() {
         
+        collectionView.backgroundColor = .white
         collectionView.register(CollectionViewCell.self,
                                 forCellWithReuseIdentifier: CollectionViewCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
