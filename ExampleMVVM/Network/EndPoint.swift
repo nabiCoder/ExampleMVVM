@@ -1,0 +1,34 @@
+//
+//  EndPoint.swift
+//  ExampleMVVM
+//
+//  Created by Денис Набиуллин on 14.12.2023.
+//
+
+import Foundation
+//https://jsonplaceholder.typicode.com/photos/1
+
+struct EndPoint {
+    var id: Int
+}
+
+extension EndPoint {
+    var url: URL {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "jsonplaceholder.typicode.com"
+        components.path = "photos/\(id)"
+        
+        guard let url = components.url else {
+            fatalError("Failed to create URL")
+        }
+        
+        return url
+    }
+}
+
+extension EndPoint {
+    static func image(id: Int) -> Self {
+        EndPoint(id: id)
+    }
+}

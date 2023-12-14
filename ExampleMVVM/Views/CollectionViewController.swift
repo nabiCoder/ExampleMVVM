@@ -9,8 +9,10 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class CollectionViewController: UICollectionViewController {
-
+class CollectionViewController: UICollectionViewController, FlowControllerProtocol {
+    
+    var completionHandler: ((Image) -> (Void))?
+        
     override func viewDidLoad() {
         super.viewDidLoad()
 
