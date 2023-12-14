@@ -10,6 +10,7 @@ import UIKit
 class DetailViewController: UIViewController {
     
     var viewModel: DetailViewModel?
+    var shareButton: UIBarButtonItem?
     
     init(_ viewModel: DetailViewModel) {
         self.viewModel = viewModel
@@ -40,7 +41,12 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        
         bindViewModel()
+        
+        setupShareButton()
+        setupNavItem()
+    
     }
     
     private func bindViewModel() {

@@ -35,6 +35,8 @@
 		3965E9E82B2B9999007233EC /* ShortImageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9E72B2B9999007233EC /* ShortImageData.swift */; };
 		3965E9EA2B2B9B1B007233EC /* ImageDataWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9E92B2B9B1B007233EC /* ImageDataWrapper.swift */; };
 		3965E9EC2B2BAF6E007233EC /* FlowLayout + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9EB2B2BAF6E007233EC /* FlowLayout + Extension.swift */; };
+		3965E9EE2B2BC042007233EC /* NavigationController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9ED2B2BC042007233EC /* NavigationController + Extension.swift */; };
+		3965E9F02B2BC537007233EC /* ActivityViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9EF2B2BC537007233EC /* ActivityViewController + Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +70,8 @@
 		3965E9E72B2B9999007233EC /* ShortImageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortImageData.swift; sourceTree = "<group>"; };
 		3965E9E92B2B9B1B007233EC /* ImageDataWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDataWrapper.swift; sourceTree = "<group>"; };
 		3965E9EB2B2BAF6E007233EC /* FlowLayout + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowLayout + Extension.swift"; sourceTree = "<group>"; };
+		3965E9ED2B2BC042007233EC /* NavigationController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationController + Extension.swift"; sourceTree = "<group>"; };
+		3965E9EF2B2BC537007233EC /* ActivityViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityViewController + Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -204,6 +208,8 @@
 			children = (
 				3965E9C02B2AF5E4007233EC /* URLSession + Extension.swift */,
 				3965E9EB2B2BAF6E007233EC /* FlowLayout + Extension.swift */,
+				3965E9ED2B2BC042007233EC /* NavigationController + Extension.swift */,
+				3965E9EF2B2BC537007233EC /* ActivityViewController + Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -354,6 +360,7 @@
 				3965E9912B2ADC51007233EC /* AppDelegate.swift in Sources */,
 				3965E9AC2B2AE100007233EC /* CollectionVC + Extension.swift in Sources */,
 				3965E9BE2B2AF1FB007233EC /* EndPoint.swift in Sources */,
+				3965E9F02B2BC537007233EC /* ActivityViewController + Extension.swift in Sources */,
 				3965E9EC2B2BAF6E007233EC /* FlowLayout + Extension.swift in Sources */,
 				3965E9B92B2AEBCF007233EC /* FlowControllerProtocol.swift in Sources */,
 				3965E9E62B2B8F13007233EC /* ImageCacheService.swift in Sources */,
@@ -373,6 +380,7 @@
 				3965E9BB2B2AF1BA007233EC /* ImageData.swift in Sources */,
 				3965E9CA2B2B0ECB007233EC /* NetworkDataFetch.swift in Sources */,
 				3965E9D22B2B1B99007233EC /* DetailVC + Extension.swift in Sources */,
+				3965E9EE2B2BC042007233EC /* NavigationController + Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

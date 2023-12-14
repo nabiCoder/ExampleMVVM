@@ -9,6 +9,21 @@ import UIKit
 
 extension DetailViewController {
     
+    func setupShareButton() {
+        
+        shareButton = navigationController?.shareButton(target: self,
+                                                        action: #selector(shareButtonTapped))
+    }
+    
+    func setupNavItem() {
+        
+        navigationItem.rightBarButtonItem = shareButton
+    }
+    
+    @objc func shareButtonTapped() {
+        viewModel?.shareImage(from: self) { }
+    }
+    
     func setupView() {
         view.backgroundColor = .white
         view.addSubview(imageView)
