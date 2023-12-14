@@ -10,11 +10,11 @@ import UIKit
 class AppCoordinator: CoordinatorProtocol {
     
     var navigationController: UINavigationController
-    var moduleFactory: ModuleFactory
+    let controllerFactory = DefaultControllerFactory()
+    let viewModelFactory = DefaultViewModelFactory()
     
-    init(navigationController: UINavigationController, moduleFactory: ModuleFactory) {
+    init(navigationController: UINavigationController) {
         self.navigationController = navigationController
-        self.moduleFactory = moduleFactory
     }
     
     func start() {
@@ -23,7 +23,22 @@ class AppCoordinator: CoordinatorProtocol {
     
     private func showMainScreen() {
         
-        let controller = moduleFactory.createMainScreenController()
+        let imageCacheService = ImageCacheService()
+        
+        let viewModel = viewModelFactory.createMainViewModel(imageCacheService)
+        
+        let controller = controllerFactory.createMainScreenController(viewModel)
+        controller.completionHandler = { [weak self] value in
+            self?.showDetailScreen(value)
+        }
+        
+        navigationController.pushViewController(controller, animated: true)
+    }
+    
+    private func showDetailScreen(_ data: ShortImageData) {
+        
+        let controller = controllerFactory.createDetailViewController(data)
+        //controller.viewModel = viewModelFactory.createDetailViewModel()
         
         navigationController.pushViewController(controller, animated: true)
     }

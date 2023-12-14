@@ -17,7 +17,7 @@ extension EndPoint {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "jsonplaceholder.typicode.com"
-        components.path = "photos/\(id)"
+        components.path = "/photos/\(id)"
         
         guard let url = components.url else {
             fatalError("Failed to create URL")

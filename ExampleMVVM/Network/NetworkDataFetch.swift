@@ -13,15 +13,14 @@ class NetworkDataFetch {
     
     private init() {}
     
-    func fetchImage(id: Int, responce: @escaping (Image?, NetworkError?) -> Void) {
+    func fetchImage(id: Int, responce: @escaping (ImageData?, NetworkError?) -> Void) {
         
         NetworkRequest.shared.getData(id: id) { result in
             
             switch result {
-                
             case .success(let data):
                 do {
-                    let image = try JSONDecoder().decode(Image.self, from: data)
+                    let image = try JSONDecoder().decode(ImageData.self, from: data)
                     responce(image, nil)
                 } catch let jsonError{
                     print(jsonError.localizedDescription)
