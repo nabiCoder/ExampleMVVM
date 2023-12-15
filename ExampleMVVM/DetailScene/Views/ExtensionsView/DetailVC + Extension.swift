@@ -9,7 +9,7 @@ import UIKit
 
 extension DetailViewController {
     
-    func setupShareButton() {
+    func createShareButton() {
         
         shareButton = navigationController?.shareButton(target: self,
                                                         action: #selector(shareButtonTapped))
@@ -21,16 +21,19 @@ extension DetailViewController {
     }
     
     @objc func shareButtonTapped() {
+        
         viewModel?.shareImage(from: self) { }
     }
     
     func setupView() {
+        
         view.backgroundColor = .white
         view.addSubview(imageView)
         view.addSubview(titleLabel)
     }
     
     func setupConstraints() {
+        
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
@@ -39,7 +42,8 @@ extension DetailViewController {
             
             titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            titleLabel.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

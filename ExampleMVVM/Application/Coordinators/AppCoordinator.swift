@@ -7,29 +7,32 @@
 
 import UIKit
 
-class AppCoordinator: CoordinatorProtocol {
+final class AppCoordinator: CoordinatorProtocol {
     
     var navigationController: UINavigationController
     let controllerFactory = DefaultControllerFactory()
     let viewModelFactory = DefaultViewModelFactory()
+    let imageCacheService: ImageCacheService
     
-    init(navigationController: UINavigationController) {
+    // MARK: - Initialization
+    
+    init(navigationController: UINavigationController, imageCacheService: ImageCacheService) {
+        
         self.navigationController = navigationController
+        self.imageCacheService = imageCacheService
     }
     
     func start() {
+        
         showMainScreen()
     }
     
     private func showMainScreen() {
         
-        let imageCacheService = ImageCacheService()
-        
         let viewModel = viewModelFactory.createMainViewModel(imageCacheService)
-        
         let controller = controllerFactory.createMainScreenController(viewModel)
+        
         controller.completionHandler = { [weak self] value in
-            print(value)
             self?.showDetailScreen(value)
         }
         
@@ -39,7 +42,6 @@ class AppCoordinator: CoordinatorProtocol {
     private func showDetailScreen(_ shortImageData: ShortImageData) {
         
         let viewModel = viewModelFactory.createDetailViewModel(shortImageData)
-        
         let controller = controllerFactory.createDetailViewController(viewModel)
         
         navigationController.pushViewController(controller, animated: true)

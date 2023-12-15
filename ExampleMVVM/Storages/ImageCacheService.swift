@@ -12,7 +12,7 @@ protocol ImageCaching {
     func loadImage(with id: Int, completion: @escaping (ShortImageData?) -> Void)
 }
 
-class ImageCacheService: ImageCaching {
+final class ImageCacheService: ImageCaching {
     
     private let cache = NSCache<NSNumber, ImageDataWrapper>()
     
@@ -43,12 +43,10 @@ class ImageCacheService: ImageCaching {
                         let imageDataWrapper = ImageDataWrapper(imageData)
                         self.cache.setObject(imageDataWrapper, forKey: key)
                         
-                        // Создаем ShortImageData
                         let shortImageData = ShortImageData(title: imageData.title, image: imageData.image)
                         completion(shortImageData)
                     }
                 } else {
-                    
                     print("Error loading image: \(error?.localizedDescription ?? "Unknown error")")
                     completion(nil)
                 }

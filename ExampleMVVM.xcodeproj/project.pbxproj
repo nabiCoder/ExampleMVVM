@@ -107,11 +107,11 @@
 				3965E9A42B2ADDD2007233EC /* Application */,
 				3965E9CB2B2B1B0F007233EC /* CollectionScene */,
 				3965E9CC2B2B1B27007233EC /* DetailScene */,
-				3965E9BC2B2AF1E6007233EC /* Network */,
+				3965E9BC2B2AF1E6007233EC /* Networks */,
+				3965E9F12B2BCAFA007233EC /* Storages */,
 				3965E9D72B2B1F3E007233EC /* Helpers */,
 				3965E9BF2B2AF5A1007233EC /* Extensions */,
 				3965E9A52B2ADE20007233EC /* SupportingFiles */,
-				3965E9E52B2B8F13007233EC /* ImageCacheService.swift */,
 			);
 			path = ExampleMVVM;
 			sourceTree = "<group>";
@@ -192,7 +192,7 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		3965E9BC2B2AF1E6007233EC /* Network */ = {
+		3965E9BC2B2AF1E6007233EC /* Networks */ = {
 			isa = PBXGroup;
 			children = (
 				3965E9BD2B2AF1FB007233EC /* EndPoint.swift */,
@@ -200,7 +200,7 @@
 				3965E9C42B2AFCFC007233EC /* NetworkRequest.swift */,
 				3965E9C92B2B0ECB007233EC /* NetworkDataFetch.swift */,
 			);
-			path = Network;
+			path = Networks;
 			sourceTree = "<group>";
 		};
 		3965E9BF2B2AF5A1007233EC /* Extensions */ = {
@@ -281,6 +281,14 @@
 				3965E9E92B2B9B1B007233EC /* ImageDataWrapper.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		3965E9F12B2BCAFA007233EC /* Storages */ = {
+			isa = PBXGroup;
+			children = (
+				3965E9E52B2B8F13007233EC /* ImageCacheService.swift */,
+			);
+			path = Storages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

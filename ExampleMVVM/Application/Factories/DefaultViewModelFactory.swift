@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DefaultViewModelFactory {
+final class DefaultViewModelFactory {
     
     func createMainViewModel(_ imageCacheService: ImageCacheService) -> CollectionViewModel {
         

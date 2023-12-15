@@ -7,40 +7,35 @@
 
 import UIKit
 
-class CollectionViewCell: UICollectionViewCell {
+final class CollectionViewCell: UICollectionViewCell {
     
     static let identifier = "Cell"
     
-    let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+    lazy var customLayer: CALayer = {
+        
+        let layer = CALayer()
+        layer.contentsGravity = .resizeAspect
+        return layer
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.addSubview(imageView)
-        setupConstraints()
         
+        contentView.layer.addSublayer(customLayer)
+        setupConstraints()
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     func configureCell(_ viewModel: CellViewModel) {
-        imageView.image = viewModel.image
+        
+        customLayer.contents = viewModel.image.cgImage
     }
 }
 
-extension CollectionViewCell {
-    func setupConstraints() {
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-        ])
+private extension CollectionViewCell {
+    
+    private func setupConstraints() {
+        customLayer.frame = contentView.bounds
     }
 }

@@ -7,11 +7,12 @@
 
 import UIKit
 
-class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    
-    var coordinator = AppCoordinator(navigationController: UINavigationController())
+   
+    var coordinator = AppCoordinator(navigationController: UINavigationController(), 
+                                     imageCacheService: ImageCacheService())
 
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,

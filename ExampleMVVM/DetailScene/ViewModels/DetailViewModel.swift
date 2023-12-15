@@ -13,7 +13,7 @@ protocol ViewModelDataSource: AnyObject {
     var cellDataSource: Observable<ShortImageData> { get set }
 }
 
-class DetailViewModel: ViewModelDataSource {
+final class DetailViewModel: ViewModelDataSource {
     
     var image: UIImage?
     var dataSource: ShortImageData?
@@ -21,22 +21,26 @@ class DetailViewModel: ViewModelDataSource {
     var cellDataSource: Observable<ShortImageData> = Observable(value: nil)
     
     init(cellDataSource: ShortImageData) {
+        
         self.dataSource = cellDataSource
-        image = cellDataSource.image
-        fetc()
+        self.image = cellDataSource.image
+        updateCellDataSource()
     }
     
-    func fetc() {
+    func updateCellDataSource() {
+        
         cellDataSource.value = dataSource
     }
     
     func shareImage(from viewController: UIViewController, completion: @escaping () -> Void) {
+        
             guard let image = image else { return }
 
             let shareController = UIActivityViewController(activityItems: [image], 
                                                            applicationActivities: nil)
+        
             viewController.present(shareController, animated: true) {
                 completion()
-            }
         }
+    }
 }

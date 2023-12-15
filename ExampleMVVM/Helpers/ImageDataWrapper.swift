@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ImageDataWrapper {
+final class ImageDataWrapper {
     
     let imageData: ShortImageData
     

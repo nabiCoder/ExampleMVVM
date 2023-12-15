@@ -16,14 +16,17 @@ final class CollectionViewController: UICollectionViewController, FlowController
     var completionHandler: ((ShortImageData) -> (Void))?
     var cellDataSourse = [CellViewModel]()
     
+    // MARK: - Initialization
+    
     init(_ viewModel: CollectionViewModel) {
+        
         self.viewModel = viewModel
         super.init(collectionViewLayout: layout.calculateCollectionViewLayout())
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +49,8 @@ final class CollectionViewController: UICollectionViewController, FlowController
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
     }
+    
+    // MARK: - Binding
     
     private func bindViewModel() {
         

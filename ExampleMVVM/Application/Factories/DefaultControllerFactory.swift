@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DefaultControllerFactory {
+final class DefaultControllerFactory {
     
     func createMainScreenController(_ viewModel: CollectionViewModel) -> CollectionViewController {
         
