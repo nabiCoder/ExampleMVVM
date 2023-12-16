@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 protocol ImageCaching {
     
@@ -14,56 +15,62 @@ protocol ImageCaching {
 
 final class ImageCacheService: ImageCaching {
     
-    private let cache = NSCache<NSNumber, ImageDataWrapper>()
-    
     func loadImage(with id: Int, completion: @escaping (ShortImageData?) -> Void) {
-        let key = NSNumber(value: id)
         
-        if let cachedObject = cache.object(forKey: key) {
-            let image = cachedObject.imageData.image
-            let title = cachedObject.imageData.title
+        let key = String(id)
+        
+        if let cachedImage = loadCachedImage(forKey: key) {
             
-            completion(ShortImageData(title: title, image: image))
+            completion(ShortImageData(title: key, image: cachedImage))
         } else {
-            NetworkDataFetch.shared.fetchImage(id: id) { [weak self] image, error in
-                guard let self = self else { return }
-                
-                if let image = image {
-                    
-                    guard let url = URL(string: image.url) else { return }
-                    let title = image.title
-                    self.downloadImage(url: url) { downloadedImage in
-                        guard let downloadedImage = downloadedImage else {
-                            print("Error downloading image")
-                            completion(nil)
-                            return
-                        }
-                        
-                        let imageData = ShortImageData(title: title, image: downloadedImage)
-                        let imageDataWrapper = ImageDataWrapper(imageData)
-                        self.cache.setObject(imageDataWrapper, forKey: key)
-                        
-                        let shortImageData = ShortImageData(title: imageData.title, image: imageData.image)
-                        completion(shortImageData)
-                    }
-                } else {
-                    print("Error loading image: \(error?.localizedDescription ?? "Unknown error")")
-                    completion(nil)
-                }
-            }
+            
+            fetchAndCacheImage(id: id, key: key, completion: completion)
         }
     }
-    private func downloadImage(url: URL, completion: @escaping (UIImage?) -> Void) {
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data, error == nil else {
+    
+    private func loadCachedImage(forKey key: String) -> UIImage? {
+        
+        return SDImageCache.shared.imageFromDiskCache(forKey: key)
+    }
+    
+    private func fetchAndCacheImage(id: Int, key: String, completion: @escaping (ShortImageData?) -> Void) {
+        
+        NetworkDataFetch.shared.fetchImage(id: id) { [unowned self] image, error in
+            
+            guard let image = image, error == nil else {
+                print("Error loading image:", error?.localizedDescription ?? "Unknown error")
                 completion(nil)
+                
                 return
             }
             
-            let image = UIImage(data: data)
-            completion(image)
+            self.downloadAndCacheImage(image: image, key: key, completion: completion)
         }
-        task.resume()
+    }
+    
+    private func downloadAndCacheImage(image: ImageData,
+                                       key: String,
+                                       completion: @escaping (ShortImageData?) -> Void) {
+        guard let imageURL = URL(string: image.url) else {
+            print("Error loading image: Invalid URL")
+            completion(nil)
+            
+            return
+        }
+        
+        SDWebImageManager.shared.loadImage(with: imageURL, 
+                                           options: .highPriority,
+                                           progress: nil) { downloadedImage, _, _, _, _, _ in
+            guard let downloadedImage = downloadedImage else {
+                print("Error downloading image")
+                completion(nil)
+                
+                return
+            }
+            
+            SDImageCache.shared.store(downloadedImage, forKey: key, toDisk: true)
+            
+            completion(ShortImageData(title: image.title, image: downloadedImage))
+        }
     }
 }
-

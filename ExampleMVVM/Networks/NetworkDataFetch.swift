@@ -30,4 +30,7 @@ final class NetworkDataFetch {
             }
         }
     }
+    deinit {
+        print("deinit")
+    }
 }
