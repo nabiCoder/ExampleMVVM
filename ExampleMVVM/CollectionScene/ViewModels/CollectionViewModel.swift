@@ -37,14 +37,14 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         self.imageCacheService = imageCacheService
     }
     
-    func numberOfSections() -> Int { 1 }
-    
-    func numberOfRows(in section: Int) -> Int { cellDataSource.value?.count ?? 0 }
-    
     var isLoading: Observable<Bool> = Observable(value: false)
     var dataSource: [ShortImageData]?
     var cellDataSource: Observable<[CellViewModel]> = Observable(value: nil)
     var isError: Observable<NetworkError> = Observable(value: nil)
+    
+    func numberOfSections() -> Int { 1 }
+    
+    func numberOfRows(in section: Int) -> Int { cellDataSource.value?.count ?? 0 }
     
     func fetchImages() {
         

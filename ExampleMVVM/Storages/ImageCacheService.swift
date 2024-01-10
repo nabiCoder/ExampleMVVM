@@ -10,62 +10,106 @@ import SDWebImage
 
 typealias ImageResult = Result<ShortImageData, NetworkError>
 
-protocol ImageCaching {
+// MARK: - Protocols
+
+protocol ImageCaching: AnyObject {
     
-    func loadImage(with id: Int, completion: @escaping (Result<ShortImageData, NetworkError>) -> Void)
+    func loadImage(with id: Int, completion: @escaping (ImageResult) -> Void)
 }
 
-final class ImageCacheService: ImageCaching {
+protocol ImageCachable {
+    
+    func loadCachedImage(forKey key: String) -> UIImage?
+    func storeImage(_ image: UIImage, forKey key: String)
+}
+
+protocol ImageFetcher {
+    
+    func fetchImage(id: Int, completion: @escaping (ImageResult) -> Void)
+}
+
+// MARK: - ImageCacheService class
+
+final class ImageCacheService {
     
     private let userDefaults = UserDefaults.standard
     private let lastUpdateKey = "LastUpdate"
+    private let updateInterval: TimeInterval = 60
+}
+
+// MARK: - LoadImage method
+
+extension ImageCacheService: ImageCaching {
     
-    func loadImage(with id: Int, completion: @escaping (ImageResult) -> Void) {
+    func loadImage(with id: Int,
+                   completion: @escaping (ImageResult) -> Void) {
         
         let key = String(id)
-        let updateInterval: TimeInterval = 60
         
-        let lastUpdateDate = userDefaults.object(forKey: lastUpdateKey) as? Date
-        let shouldFetchImage = lastUpdateDate == nil || Date().timeIntervalSince(lastUpdateDate!) >= updateInterval
-        
-        if !shouldFetchImage, let cachedImage = SDImageCache.shared.imageFromDiskCache(forKey: key) {
+        guard let lastUpdateDate = userDefaults.object(forKey: lastUpdateKey) as? Date,
+              Date().timeIntervalSince(lastUpdateDate) < updateInterval,
+              let cachedImage = loadCachedImage(forKey: key) else {
             
-            completion(.success(ShortImageData(title: key, image: cachedImage)))
-        } else {
+            fetchImage(id: id, completion: completion)
             
-            fetchAndCacheImage(id: id, key: key, completion: completion)
+            return
         }
+        
+        completion(.success(ShortImageData(title: key,
+                                           image: cachedImage)))
     }
+}
+
+// MARK: - LoadCachedImage, StoreImage methods
+
+extension ImageCacheService: ImageCachable {
     
-    private func loadCachedImage(forKey key: String) -> UIImage? {
+    func loadCachedImage(forKey key: String) -> UIImage? {
         
         return SDImageCache.shared.imageFromDiskCache(forKey: key)
     }
     
-    private func fetchAndCacheImage(id: Int,
-                                    key: String,
-                                    completion: @escaping (ImageResult) -> Void) {
+    func storeImage(_ image: UIImage,
+                    forKey key: String) {
+        
+        SDImageCache.shared.store(image, forKey: key, toDisk: true)
+    }
+}
+
+// MARK: - FetchImage method
+
+extension ImageCacheService: ImageFetcher {
+    
+    func fetchImage(id: Int,
+                    completion: @escaping (ImageResult) -> Void) {
         
         NetworkDataFetch.shared.fetchImage(id: id) { [weak self] result in
-            
             guard let self = self else { return }
             
             switch result {
             case .success(let data):
                 
-                self.downloadAndCacheImage(image: data, key: key, completion: completion)
+                self.downloadAndCacheImage(image: data,
+                                           key: String(id),
+                                           completion: completion)
             case .failure(let error):
                 
                 completion(.failure(error))
             }
         }
     }
+}
+
+// MARK: - DownloadAndCacheImage method
+
+private extension ImageCacheService {
     
-    private func downloadAndCacheImage(image: ImageData,
-                                       key: String,
-                                       completion: @escaping (ImageResult) -> Void) {
+    func downloadAndCacheImage(image: ImageData,
+                               key: String,
+                               completion: @escaping (ImageResult) -> Void) {
+        
         guard let imageURL = URL(string: image.url) else {
-            print("Error loading image: Invalid URL")
+            
             completion(.failure(.canNotPareData))
             
             return
@@ -75,17 +119,17 @@ final class ImageCacheService: ImageCaching {
                                            options: .highPriority,
                                            progress: nil) { downloadedImage, _, _, _, _, _ in
             guard let downloadedImage = downloadedImage else {
-                print("Error downloading image")
+                
                 completion(.failure(.errorDownloadingImage))
                 
                 return
             }
             
-            SDImageCache.shared.store(downloadedImage, forKey: key, toDisk: true)
-            
+            self.storeImage(downloadedImage, forKey: key)
             self.userDefaults.set(Date(), forKey: self.lastUpdateKey)
             
-            completion(.success(ShortImageData(title: image.title, image: downloadedImage)))
+            completion(.success(ShortImageData(title: image.title,
+                                               image: downloadedImage)))
         }
     }
 }
