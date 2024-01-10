@@ -10,9 +10,10 @@ import UIKit
 final class AppCoordinator: CoordinatorProtocol {
     
     var navigationController: UINavigationController
-    let controllerFactory = DefaultControllerFactory()
-    let viewModelFactory = DefaultViewModelFactory()
-    let imageCacheService: ImageCacheService
+    private let controllerFactory = DefaultControllerFactory()
+    private let viewModelFactory = DefaultViewModelFactory()
+    private let imageCacheService: ImageCacheService
+    private let imageIdArray = Array(1...10)
     
     // MARK: - Initialization
     
@@ -29,7 +30,7 @@ final class AppCoordinator: CoordinatorProtocol {
     
     private func showMainScreen() {
         
-        let viewModel = viewModelFactory.createMainViewModel(imageCacheService)
+        let viewModel = viewModelFactory.createMainViewModel(imageCacheService, imageIdArray)
         let controller = controllerFactory.createMainScreenController(viewModel)
         
         controller.completionHandler = { [weak self] value in
