@@ -73,8 +73,9 @@ final class CollectionViewController: UICollectionViewController, FlowController
         viewModel?.isError.bind({ [weak self] error in
             guard let self, let error else { return }
             
-            errorAlertService.showAlert(on: self, with: error) { }
-            
+            DispatchQueue.main.async {
+                self.errorAlertService.showAlert(on: self, with: error) { }
+            }
         })
     }
 }

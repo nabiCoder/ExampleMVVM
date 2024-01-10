@@ -17,11 +17,18 @@ protocol ImageCaching {
 
 final class ImageCacheService: ImageCaching {
     
+    private let userDefaults = UserDefaults.standard
+    private let lastUpdateKey = "LastUpdate"
+    
     func loadImage(with id: Int, completion: @escaping (ImageResult) -> Void) {
         
         let key = String(id)
+        let updateInterval: TimeInterval = 60
         
-        if let cachedImage = loadCachedImage(forKey: key) {
+        let lastUpdateDate = userDefaults.object(forKey: lastUpdateKey) as? Date
+        let shouldFetchImage = lastUpdateDate == nil || Date().timeIntervalSince(lastUpdateDate!) >= updateInterval
+        
+        if !shouldFetchImage, let cachedImage = SDImageCache.shared.imageFromDiskCache(forKey: key) {
             
             completion(.success(ShortImageData(title: key, image: cachedImage)))
         } else {
@@ -75,6 +82,8 @@ final class ImageCacheService: ImageCaching {
             }
             
             SDImageCache.shared.store(downloadedImage, forKey: key, toDisk: true)
+            
+            self.userDefaults.set(Date(), forKey: self.lastUpdateKey)
             
             completion(.success(ShortImageData(title: image.title, image: downloadedImage)))
         }
