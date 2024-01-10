@@ -9,9 +9,9 @@ import Foundation
 
 enum NetworkError: String, Error {
     
-    case urlError = "Invalid URL"
-    case canNotPareData = "Failed to parse data"
-    case errorDownloadingImage = "Error downloading image"
+    case urlError = "Недопустимый URL-адрес"
+    case canNotParseData = "Не удалось преобразовать данные"
+    case errorDownloadingImage = "Ошибка при загрузке изображения"
     
     var localizedDescription: String {
         return self.rawValue

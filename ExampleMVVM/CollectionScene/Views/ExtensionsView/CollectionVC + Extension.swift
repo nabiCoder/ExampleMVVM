@@ -5,7 +5,6 @@
 //  Created by Денис Набиуллин on 14.12.2023.
 //
 
-import Foundation
 import UIKit
 
 extension CollectionViewController {
@@ -44,7 +43,8 @@ extension CollectionViewController {
         (viewModel?.numberOfSections()) ?? 0
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(_ collectionView: UICollectionView, 
+                                 numberOfItemsInSection section: Int) -> Int {
         
         (viewModel?.numberOfRows(in: section)) ?? 0
     }
@@ -64,7 +64,8 @@ extension CollectionViewController {
     
     // MARK: - UICollectionViewDelegate
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    override func collectionView(_ collectionView: UICollectionView, 
+                                 didSelectItemAt indexPath: IndexPath) {
         
         guard let shortImageData = viewModel?.dataSource else { return }
         

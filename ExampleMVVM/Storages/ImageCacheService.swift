@@ -110,7 +110,7 @@ private extension ImageCacheService {
         
         guard let imageURL = URL(string: image.url) else {
             
-            completion(.failure(.canNotPareData))
+            completion(.failure(.canNotParseData))
             
             return
         }

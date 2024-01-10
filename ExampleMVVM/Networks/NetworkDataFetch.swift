@@ -27,7 +27,7 @@ final class NetworkDataFetch {
 //                    responce(.failure(.canNotPareData))
                 } catch _{
                     
-                    responce(.failure(.canNotPareData))
+                    responce(.failure(.canNotParseData))
                 }
             case .failure(_):
                 

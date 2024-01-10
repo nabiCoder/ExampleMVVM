@@ -11,7 +11,7 @@ final class CollectionViewController: UICollectionViewController, FlowController
     
     private let activityIndicator = UIActivityIndicatorView()
     private let layout = UICollectionViewFlowLayout()
-    let errorAlertService = ErrorAlertService.shared
+    private let errorAlertService = ErrorAlertService.shared
     
     var viewModel: CollectionViewModel?
     var completionHandler: ((ShortImageData) -> (Void))?

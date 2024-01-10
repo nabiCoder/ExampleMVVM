@@ -15,9 +15,9 @@ protocol ViewModelDataSource: AnyObject {
 
 final class DetailViewModel: ViewModelDataSource {
     
-    var image: UIImage?
-    var dataSource: ShortImageData?
+    private var image: UIImage?
     
+    var dataSource: ShortImageData?
     var cellDataSource: Observable<ShortImageData> = Observable(value: nil)
     
     init(cellDataSource: ShortImageData) {
@@ -28,7 +28,7 @@ final class DetailViewModel: ViewModelDataSource {
         updateCellDataSource()
     }
     
-    func updateCellDataSource() {
+    private func updateCellDataSource() {
         
         cellDataSource.value = dataSource
     }
