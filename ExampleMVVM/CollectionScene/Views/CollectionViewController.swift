@@ -11,6 +11,7 @@ final class CollectionViewController: UICollectionViewController, FlowController
     
     private let activityIndicator = UIActivityIndicatorView()
     private let layout = UICollectionViewFlowLayout()
+    let errorAlertService = ErrorAlertService.shared
     
     var viewModel: CollectionViewModel?
     var completionHandler: ((ShortImageData) -> (Void))?
@@ -35,7 +36,7 @@ final class CollectionViewController: UICollectionViewController, FlowController
         setupCollection()
         setupConstraints()
         
-        viewModel!.fetchImages()
+        viewModel?.fetchImages()
         bindViewModel()
     }
     
@@ -63,10 +64,17 @@ final class CollectionViewController: UICollectionViewController, FlowController
         })
         
         viewModel?.cellDataSource.bind({ [weak self] images in
-            guard let self, let images else { return }
+            guard let data = images, let self else { return }
             
-            cellDataSourse = images
+            cellDataSourse = data
             reloadCollectionView()
+        })
+        
+        viewModel?.isError.bind({ [weak self] error in
+            guard let self, let error else { return }
+            
+            errorAlertService.showAlert(on: self, with: error) { }
+            
         })
     }
 }

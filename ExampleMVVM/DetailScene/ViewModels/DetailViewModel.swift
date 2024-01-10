@@ -24,6 +24,7 @@ final class DetailViewModel: ViewModelDataSource {
         
         self.dataSource = cellDataSource
         self.image = cellDataSource.image
+        
         updateCellDataSource()
     }
     

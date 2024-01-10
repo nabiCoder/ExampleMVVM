@@ -20,9 +20,11 @@ final class NetworkRequest {
             DispatchQueue.main.async {
                 
                 if error != nil {
+                    
                     comletionHandler(.failure(.urlError))
                 } else {
                     guard let data else { return }
+                    
                     comletionHandler(.success(data))
                 }
             }

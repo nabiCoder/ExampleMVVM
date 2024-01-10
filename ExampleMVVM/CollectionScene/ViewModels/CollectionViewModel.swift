@@ -23,6 +23,7 @@ protocol CollectionViewModelProtocol: CollectionDataProvider, CollectionDataLoad
     
     var dataSource: [ShortImageData]? { get set }
     var cellDataSource: Observable<[CellViewModel]> { get set }
+    var isError: Observable<NetworkError> { get set }
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
@@ -35,7 +36,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         
         self.imageCacheService = imageCacheService
     }
-   
+    
     func numberOfSections() -> Int { 1 }
     
     func numberOfRows(in section: Int) -> Int { cellDataSource.value?.count ?? 0 }
@@ -43,6 +44,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     var isLoading: Observable<Bool> = Observable(value: false)
     var dataSource: [ShortImageData]?
     var cellDataSource: Observable<[CellViewModel]> = Observable(value: nil)
+    var isError: Observable<NetworkError> = Observable(value: nil)
     
     func fetchImages() {
         
@@ -50,17 +52,23 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         
         let imageId = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         var images = [ShortImageData]()
+        var fetchError: NetworkError?
         let group = DispatchGroup()
         
         imageId.forEach {
             
             group.enter()
             
-            imageCacheService.loadImage(with: $0) { shortImageData in
-                guard let shortImageData else { return }
+            imageCacheService.loadImage(with: $0) { result in
                 
-                images.append(shortImageData)
-                
+                switch result {
+                case .success(let shortImageData):
+                    
+                    images.append(shortImageData)
+                case .failure(let error):
+                    
+                    fetchError = error
+                }
                 group.leave()
             }
         }
@@ -68,8 +76,15 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         group.notify(queue: .main) {
             
             self.isLoading.value = false
-            self.dataSource = images
-            self.cellDataSource.value = images.compactMap({ CellViewModel($0) })
+            
+            if let error = fetchError {
+                
+                self.isError.value = error
+            } else {
+                
+                self.dataSource = images
+                self.cellDataSource.value = images.compactMap({ CellViewModel($0) })
+            }
         }
     }
 }

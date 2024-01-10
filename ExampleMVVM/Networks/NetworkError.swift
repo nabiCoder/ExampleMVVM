@@ -7,8 +7,13 @@
 
 import Foundation
 
-enum NetworkError: Error {
+enum NetworkError: String, Error {
     
-    case urlError
-    case canNotPareData
+    case urlError = "Invalid URL"
+    case canNotPareData = "Failed to parse data"
+    case errorDownloadingImage = "Error downloading image"
+    
+    var localizedDescription: String {
+        return self.rawValue
+    }
 }

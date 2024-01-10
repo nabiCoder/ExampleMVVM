@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		39035B582B4E8FCB00B114DD /* ErrorAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39035B572B4E8FCB00B114DD /* ErrorAlertService.swift */; };
 		3965E9912B2ADC51007233EC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9902B2ADC51007233EC /* AppDelegate.swift */; };
 		3965E9932B2ADC51007233EC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9922B2ADC51007233EC /* SceneDelegate.swift */; };
 		3965E99A2B2ADC52007233EC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3965E9992B2ADC52007233EC /* Assets.xcassets */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		246C17B8DB79AF132C1466F9 /* Pods-ExampleMVVM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleMVVM.release.xcconfig"; path = "Target Support Files/Pods-ExampleMVVM/Pods-ExampleMVVM.release.xcconfig"; sourceTree = "<group>"; };
+		39035B572B4E8FCB00B114DD /* ErrorAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorAlertService.swift; sourceTree = "<group>"; };
 		3965E98D2B2ADC51007233EC /* ExampleMVVM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ExampleMVVM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3965E9902B2ADC51007233EC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3965E9922B2ADC51007233EC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -286,6 +288,7 @@
 			children = (
 				3965E9D82B2B1F68007233EC /* Observable.swift */,
 				3965E9E92B2B9B1B007233EC /* ImageDataWrapper.swift */,
+				39035B572B4E8FCB00B114DD /* ErrorAlertService.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -445,6 +448,7 @@
 				3965E9B22B2AE973007233EC /* DetailViewController.swift in Sources */,
 				3965E9DF2B2B31D8007233EC /* CollectionViewCell.swift in Sources */,
 				3965E9932B2ADC51007233EC /* SceneDelegate.swift in Sources */,
+				39035B582B4E8FCB00B114DD /* ErrorAlertService.swift in Sources */,
 				3965E9EA2B2B9B1B007233EC /* ImageDataWrapper.swift in Sources */,
 				3965E9E22B2B6FAD007233EC /* DefaultViewModelFactory.swift in Sources */,
 				3965E9C52B2AFCFC007233EC /* NetworkRequest.swift in Sources */,
