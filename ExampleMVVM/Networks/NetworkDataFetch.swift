@@ -1,10 +1,3 @@
-//
-//  NetworkDataFetch.swift
-//  ExampleMVVM
-//
-//  Created by Денис Набиуллин on 14.12.2023.
-//
-
 import Foundation
 
 final class NetworkDataFetch {
@@ -26,7 +19,6 @@ final class NetworkDataFetch {
 //                    можно проверить алерт об ошибке раскомментировав код ниже
 //                    responce(.failure(.canNotPareData))
                 } catch _{
-                    
                     responce(.failure(.canNotParseData))
                 }
             case .failure(_):

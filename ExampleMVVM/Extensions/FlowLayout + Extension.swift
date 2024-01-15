@@ -1,10 +1,3 @@
-//
-//  FlowLayout + Extension.swift
-//  ExampleMVVM
-//
-//  Created by Денис Набиуллин on 15.12.2023.
-//
-
 import UIKit
 
 extension UICollectionViewFlowLayout {

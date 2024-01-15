@@ -1,10 +1,3 @@
-//
-//  ImageCacheService.swift
-//  ExampleMVVM
-//
-//  Created by Денис Набиуллин on 15.12.2023.
-//
-
 import UIKit
 import SDWebImage
 
@@ -71,7 +64,6 @@ extension ImageCacheService: ImageCachable {
     
     func storeImage(_ image: UIImage,
                     forKey key: String) {
-        
         SDImageCache.shared.store(image, forKey: key, toDisk: true)
     }
 }
@@ -109,7 +101,6 @@ private extension ImageCacheService {
                                completion: @escaping (ImageResult) -> Void) {
         
         guard let imageURL = URL(string: image.url) else {
-            
             completion(.failure(.canNotParseData))
             
             return
@@ -119,7 +110,6 @@ private extension ImageCacheService {
                                            options: .highPriority,
                                            progress: nil) { downloadedImage, _, _, _, _, _ in
             guard let downloadedImage = downloadedImage else {
-                
                 completion(.failure(.errorDownloadingImage))
                 
                 return

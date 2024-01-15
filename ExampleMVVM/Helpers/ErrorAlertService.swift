@@ -1,10 +1,3 @@
-//
-//  ErrorAlertService.swift
-//  ExampleMVVM
-//
-//  Created by Денис Набиуллин on 10.01.2024.
-//
-
 import UIKit
 
 final class ErrorAlertService {

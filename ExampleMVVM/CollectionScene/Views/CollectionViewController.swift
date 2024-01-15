@@ -1,10 +1,3 @@
-//
-//  CollectionViewController.swift
-//  ExampleMVVM
-//
-//  Created by Денис Набиуллин on 14.12.2023.
-//
-
 import UIKit
 
 final class CollectionViewController: UICollectionViewController, FlowControllerProtocol {
