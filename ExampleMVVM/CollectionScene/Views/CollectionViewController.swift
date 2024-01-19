@@ -1,7 +1,6 @@
 import UIKit
 
 final class CollectionViewController: UICollectionViewController, FlowControllerProtocol {
-    
     private let activityIndicator = UIActivityIndicatorView()
     private let layout = UICollectionViewFlowLayout()
     private let errorAlertService = ErrorAlertService.shared
@@ -13,7 +12,6 @@ final class CollectionViewController: UICollectionViewController, FlowController
     // MARK: - Initialization
     
     init(_ viewModel: CollectionViewModel) {
-        
         self.viewModel = viewModel
         super.init(collectionViewLayout: layout.calculateCollectionViewLayout())
     }
@@ -24,7 +22,6 @@ final class CollectionViewController: UICollectionViewController, FlowController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupActivityIndicator()
         setupCollection()
         setupConstraints()
@@ -34,7 +31,6 @@ final class CollectionViewController: UICollectionViewController, FlowController
     }
     
     private func setupActivityIndicator() {
-        
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(activityIndicator)
         
@@ -47,7 +43,6 @@ final class CollectionViewController: UICollectionViewController, FlowController
     // MARK: - Binding
     
     private func bindViewModel() {
-        
         viewModel?.isLoading.bind({ [weak self] isLoading in
             guard let self, let isLoading else { return }
             

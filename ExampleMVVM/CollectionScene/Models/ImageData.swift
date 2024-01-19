@@ -1,7 +1,6 @@
 import Foundation
 
 struct ImageData: Decodable {
-    
     let albumID: Int
     let id: Int
     let title: String

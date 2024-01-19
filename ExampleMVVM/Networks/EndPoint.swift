@@ -2,12 +2,10 @@ import Foundation
 //https://jsonplaceholder.typicode.com/photos/1
 
 struct EndPoint {
-    
     var id: Int
 }
 
 extension EndPoint {
-    
     var url: URL {
         var components = URLComponents()
         components.scheme = "https"
@@ -23,7 +21,6 @@ extension EndPoint {
 }
 
 extension EndPoint {
-    
     static func image(id: Int) -> Self {
         EndPoint(id: id)
     }

@@ -1,9 +1,8 @@
 import UIKit
 
 extension CollectionViewController {
-    
+
     func reloadCollectionView() {
-        
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
@@ -12,7 +11,6 @@ extension CollectionViewController {
     // MARK: - Setup
     
     func setupCollection() {
-        
         collectionView.backgroundColor = .white
         collectionView.register(CollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewCell.identifier)
         collectionView.showsVerticalScrollIndicator = false
@@ -20,7 +18,6 @@ extension CollectionViewController {
     }
     
     func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -32,13 +29,11 @@ extension CollectionViewController {
     // MARK: - UICollectionViewDataSource
     
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        
         (viewModel?.numberOfSections()) ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, 
                                  numberOfItemsInSection section: Int) -> Int {
-        
         (viewModel?.numberOfRows(in: section)) ?? 0
     }
     
@@ -59,7 +54,6 @@ extension CollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, 
                                  didSelectItemAt indexPath: IndexPath) {
-        
         guard let shortImageData = viewModel?.dataSource else { return }
         
         completionHandler!(shortImageData[indexPath.item])

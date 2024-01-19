@@ -1,12 +1,10 @@
 import UIKit
 
 final class DetailViewController: UIViewController {
-    
     var viewModel: DetailViewModel?
     var shareButton: UIBarButtonItem?
     
     init(_ viewModel: DetailViewModel) {
-        
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -16,7 +14,6 @@ final class DetailViewController: UIViewController {
     // MARK: - UI Elements
     
     lazy var imageView: UIImageView = {
-        
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
@@ -24,7 +21,6 @@ final class DetailViewController: UIViewController {
     }()
     
     lazy var titleLabel: UILabel = {
-        
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
@@ -37,7 +33,6 @@ final class DetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
         setupConstraints()
         
@@ -50,7 +45,6 @@ final class DetailViewController: UIViewController {
     // MARK: - ViewModel Binding
     
     private func bindViewModel() {
-        
         viewModel?.cellDataSource.bind({ [weak self] shortImageData in
             guard let self, let shortImageData else { return }
             
