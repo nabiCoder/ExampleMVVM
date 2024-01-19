@@ -6,25 +6,17 @@ typealias ImageResult = Result<ShortImageData, NetworkError>
 // MARK: - Protocols
 
 protocol ImageCaching: AnyObject {
-    
-    func loadImage(with id: Int, completion: @escaping (ImageResult) -> Void)
+    func checkAndLoadImageForID(_ id: Int, completion: @escaping (ImageResult?) -> Void)
 }
 
 protocol ImageCachable {
-    
-    func loadCachedImage(forKey key: String) -> UIImage?
-    func storeImage(_ image: UIImage, forKey key: String)
-}
-
-protocol ImageFetcher {
-    
-    func fetchImage(id: Int, completion: @escaping (ImageResult) -> Void)
+    func getCachedImage(_ key: String) -> UIImage?
+    func saveImageToCache(_ image: UIImage, forKey key: String)
 }
 
 // MARK: - ImageCacheService class
 
 final class ImageCacheService {
-    
     private let userDefaults = UserDefaults.standard
     private let lastUpdateKey = "LastUpdate"
     private let updateInterval: TimeInterval = 60
@@ -34,22 +26,17 @@ final class ImageCacheService {
 
 extension ImageCacheService: ImageCaching {
     
-    func loadImage(with id: Int,
-                   completion: @escaping (ImageResult) -> Void) {
+    func checkAndLoadImageForID(_ id: Int, completion: @escaping (ImageResult?) -> Void) {
         
         let key = String(id)
         
         guard let lastUpdateDate = userDefaults.object(forKey: lastUpdateKey) as? Date,
               Date().timeIntervalSince(lastUpdateDate) < updateInterval,
-              let cachedImage = loadCachedImage(forKey: key) else {
-            
-            fetchImage(id: id, completion: completion)
-            
+              let cachedImage = getCachedImage(key) else { 
+            completion(nil)
             return
         }
-        
-        completion(.success(ShortImageData(title: key,
-                                           image: cachedImage)))
+        completion(.success(ShortImageData(title: key, image: cachedImage)))
     }
 }
 
@@ -57,52 +44,25 @@ extension ImageCacheService: ImageCaching {
 
 extension ImageCacheService: ImageCachable {
     
-    func loadCachedImage(forKey key: String) -> UIImage? {
-        
+    func getCachedImage(_ key: String) -> UIImage? {
         return SDImageCache.shared.imageFromDiskCache(forKey: key)
     }
     
-    func storeImage(_ image: UIImage,
-                    forKey key: String) {
+    func saveImageToCache(_ image: UIImage,forKey key: String) {
         SDImageCache.shared.store(image, forKey: key, toDisk: true)
-    }
-}
-
-// MARK: - FetchImage method
-
-extension ImageCacheService: ImageFetcher {
-    
-    func fetchImage(id: Int,
-                    completion: @escaping (ImageResult) -> Void) {
-        
-        NetworkDataFetch.shared.fetchImage(id: id) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let data):
-                
-                self.downloadAndCacheImage(image: data,
-                                           key: String(id),
-                                           completion: completion)
-            case .failure(let error):
-                
-                completion(.failure(error))
-            }
-        }
     }
 }
 
 // MARK: - DownloadAndCacheImage method
 
-private extension ImageCacheService {
+extension ImageCacheService {
     
-    func downloadAndCacheImage(image: ImageData,
-                               key: String,
-                               completion: @escaping (ImageResult) -> Void) {
+    func loadImageFromURL(_ imageData: ImageData,
+                          _ key: String,
+                          completion: @escaping (ImageResult) -> Void) {
         
-        guard let imageURL = URL(string: image.url) else {
+        guard let imageURL = URL(string: imageData.url) else {
             completion(.failure(.canNotParseData))
-            
             return
         }
         
@@ -111,15 +71,12 @@ private extension ImageCacheService {
                                            progress: nil) { downloadedImage, _, _, _, _, _ in
             guard let downloadedImage = downloadedImage else {
                 completion(.failure(.errorDownloadingImage))
-                
                 return
             }
             
-            self.storeImage(downloadedImage, forKey: key)
             self.userDefaults.set(Date(), forKey: self.lastUpdateKey)
             
-            completion(.success(ShortImageData(title: image.title,
-                                               image: downloadedImage)))
+            completion(.success(ShortImageData(title: imageData.title, image: downloadedImage)))
         }
     }
 }
