@@ -55,6 +55,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         var images = [ShortImageData]()
         var fetchError: NetworkError?
         let group = DispatchGroup()
+        let lock = NSLock()
         
         imageIdArray?.forEach { id in
             group.enter()
@@ -64,7 +65,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
                 
                 switch result {
                 case .success(let shortImageData):
-                    images.append(shortImageData)
+                    lock.withLock { images.append(shortImageData) }
                     group.leave()
                 case .failure(let error):
                     fetchError = error
@@ -72,7 +73,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
                 case .none:
                     self.fetchImageData(id: id) { imageResult in
                         if let imageResult = imageResult {
-                            images.append(imageResult)
+                            lock.withLock { images.append(imageResult) }
                             self.imageCacheService.saveImageToCache(imageResult.image, forKey: String(id))
                             group.leave()
                         }
