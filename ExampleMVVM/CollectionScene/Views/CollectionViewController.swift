@@ -55,7 +55,6 @@ final class CollectionViewController: UICollectionViewController, FlowController
             guard let data = images, let self else { return }
             
             cellDataSourse = data
-            print(data)
             reloadCollectionView()
         })
         

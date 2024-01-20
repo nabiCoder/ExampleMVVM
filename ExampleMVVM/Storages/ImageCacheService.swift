@@ -18,11 +18,14 @@ protocol ImageCachable {
 
 final class ImageCacheService {
     private let userDefaults = UserDefaults.standard
+    private let imageCache = SDImageCache.shared
+    private let imageManager = SDWebImageManager.shared
     private let lastUpdateKey = "LastUpdate"
     private let updateInterval: TimeInterval = 60
+    private let date = Date()
 }
 
-// MARK: - LoadImage method
+// MARK: - checkAndLoadImageForID method
 
 extension ImageCacheService: ImageCaching {
     
@@ -30,9 +33,12 @@ extension ImageCacheService: ImageCaching {
         
         let key = String(id)
         
-        guard let lastUpdateDate = userDefaults.object(forKey: lastUpdateKey) as? Date,
-              Date().timeIntervalSince(lastUpdateDate) < updateInterval,
-              let cachedImage = getCachedImage(key) else { 
+        guard let lastUpdateDate = userDefaults.object(forKey: lastUpdateKey) as? Date 
+        else { return }
+         
+        guard date.timeIntervalSince(lastUpdateDate) < updateInterval,
+                let cachedImage = getCachedImage(key)
+        else {
             completion(nil)
             return
         }
@@ -40,20 +46,20 @@ extension ImageCacheService: ImageCaching {
     }
 }
 
-// MARK: - LoadCachedImage, StoreImage methods
+// MARK: - getCachedImage, saveImageToCache methods
 
 extension ImageCacheService: ImageCachable {
     
     func getCachedImage(_ key: String) -> UIImage? {
-        return SDImageCache.shared.imageFromDiskCache(forKey: key)
+        return imageCache.imageFromDiskCache(forKey: key)
     }
     
     func saveImageToCache(_ image: UIImage,forKey key: String) {
-        SDImageCache.shared.store(image, forKey: key, toDisk: true)
+        imageCache.store(image, forKey: key, toDisk: true)
     }
 }
 
-// MARK: - DownloadAndCacheImage method
+// MARK: - loadImageFromURL method
 
 extension ImageCacheService {
     
@@ -66,15 +72,15 @@ extension ImageCacheService {
             return
         }
         
-        SDWebImageManager.shared.loadImage(with: imageURL,
-                                           options: .highPriority,
-                                           progress: nil) { downloadedImage, _, _, _, _, _ in
-            guard let downloadedImage = downloadedImage else {
+        imageManager.loadImage(with: imageURL,
+                               options: .highPriority,
+                               progress: nil) { [weak self] downloadedImage, _, _, _, _, _ in
+            guard let downloadedImage = downloadedImage, let self = self else {
                 completion(.failure(.errorDownloadingImage))
                 return
             }
             
-            self.userDefaults.set(Date(), forKey: self.lastUpdateKey)
+            self.userDefaults.set(self.date, forKey: self.lastUpdateKey)
             
             completion(.success(ShortImageData(title: imageData.title, image: downloadedImage)))
         }
