@@ -51,6 +51,7 @@ final class CollectionViewModel: CollectionViewModelProtocol {
         var fetchError: NetworkError?
         let fetchGroup = DispatchGroup()
         let cacheGroup = DispatchGroup()
+        let lock = NSLock()
         
         isLoading.value = true
         cacheGroup.enter()
@@ -63,10 +64,14 @@ final class CollectionViewModel: CollectionViewModelProtocol {
                 
                 switch result {
                 case .success(let image):
-                    images.append(image)
+                    lock.withLock {
+                        images.append(image)
+                    }
                     self.imageCacheService.saveImageToCache(image.image, forKey: String(id))
                 case .failure(let error):
-                    images.append(.init(title: String(id), image: UIImage(named: self.placeholderImage)!))
+                    lock.withLock {
+                        images.append(.init(title: String(id), image: UIImage(named: self.placeholderImage)!))
+                    }
                     fetchError = error
                 }
             }
@@ -85,7 +90,8 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     private func loadImageFromCacheOrNetwork(id: Int, 
                                              completion: @escaping (Result<ShortImageData, NetworkError>) -> Void) {
         
-        imageCacheService.getCachedImage(id) { cachedResult in
+        imageCacheService.getCachedImage(id) { [weak self] cachedResult in
+            guard let self = self else { return }
             if let cachedImage = cachedResult {
                 completion(.success(cachedImage))
             } else {

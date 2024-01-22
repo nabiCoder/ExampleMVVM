@@ -1,4 +1,3 @@
-import UIKit
 import SDWebImage
 
 typealias ImageResult = Result<ShortImageData, NetworkError>
@@ -31,7 +30,7 @@ extension ImageCacheService: ImageCachable {
         }
     }
     
-    func saveImageToCache(_ image: UIImage,forKey key: String) {
+    func saveImageToCache(_ image: UIImage, forKey key: String) {
         imageCache.store(image, forKey: key, toDisk: true)
     }
 }
