@@ -38,6 +38,7 @@
 		3965E9EC2B2BAF6E007233EC /* FlowLayout + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9EB2B2BAF6E007233EC /* FlowLayout + Extension.swift */; };
 		3965E9EE2B2BC042007233EC /* NavigationController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9ED2B2BC042007233EC /* NavigationController + Extension.swift */; };
 		3965E9F02B2BC537007233EC /* ActivityViewController + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3965E9EF2B2BC537007233EC /* ActivityViewController + Extension.swift */; };
+		39B3140E2B5DBA0800C90F66 /* Resources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B3140D2B5DBA0800C90F66 /* Resources.swift */; };
 		3FD5145CA6A3718CE72930DD /* Pods_ExampleMVVM.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA63C7F9458523ECB0906B1B /* Pods_ExampleMVVM.framework */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +77,7 @@
 		3965E9EB2B2BAF6E007233EC /* FlowLayout + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FlowLayout + Extension.swift"; sourceTree = "<group>"; };
 		3965E9ED2B2BC042007233EC /* NavigationController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NavigationController + Extension.swift"; sourceTree = "<group>"; };
 		3965E9EF2B2BC537007233EC /* ActivityViewController + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ActivityViewController + Extension.swift"; sourceTree = "<group>"; };
+		39B3140D2B5DBA0800C90F66 /* Resources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Resources.swift; sourceTree = "<group>"; };
 		5C3E4050EC1D2690310F9311 /* Pods-ExampleMVVM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleMVVM.debug.xcconfig"; path = "Target Support Files/Pods-ExampleMVVM/Pods-ExampleMVVM.debug.xcconfig"; sourceTree = "<group>"; };
 		CA63C7F9458523ECB0906B1B /* Pods_ExampleMVVM.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleMVVM.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -119,6 +121,7 @@
 				3965E9BC2B2AF1E6007233EC /* Networks */,
 				3965E9F12B2BCAFA007233EC /* Storages */,
 				3965E9D72B2B1F3E007233EC /* Helpers */,
+				39B3140F2B5DBA1D00C90F66 /* Resources */,
 				3965E9BF2B2AF5A1007233EC /* Extensions */,
 				3965E9A52B2ADE20007233EC /* SupportingFiles */,
 			);
@@ -301,6 +304,14 @@
 			path = Storages;
 			sourceTree = "<group>";
 		};
+		39B3140F2B5DBA1D00C90F66 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				39B3140D2B5DBA0800C90F66 /* Resources.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		3E78283DF4CB0EB882A6239E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -435,6 +446,7 @@
 				3965E9B52B2AEA04007233EC /* CoordinatorProtocol.swift in Sources */,
 				3965E9AA2B2ADFD4007233EC /* CollectionViewController.swift in Sources */,
 				3965E9E42B2B8499007233EC /* CellViewModel.swift in Sources */,
+				39B3140E2B5DBA0800C90F66 /* Resources.swift in Sources */,
 				3965E9C12B2AF5E4007233EC /* URLSession + Extension.swift in Sources */,
 				3965E9912B2ADC51007233EC /* AppDelegate.swift in Sources */,
 				3965E9AC2B2AE100007233EC /* CollectionVC + Extension.swift in Sources */,

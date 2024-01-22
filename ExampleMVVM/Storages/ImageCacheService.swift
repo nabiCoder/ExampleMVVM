@@ -10,7 +10,7 @@ protocol ImageCaching: AnyObject {
 }
 
 protocol ImageCachable {
-    func getCachedImage(_ key: String) -> UIImage?
+    func getCachedImage(_ id: Int, completion: @escaping (ShortImageData?) -> Void)
     func saveImageToCache(_ image: UIImage, forKey key: String)
 }
 
@@ -32,17 +32,10 @@ extension ImageCacheService: ImageCaching {
     func checkAndLoadImageForID(_ id: Int, completion: @escaping (ImageResult?) -> Void) {
         
         let key = String(id)
-        
-        guard let lastUpdateDate = userDefaults.object(forKey: lastUpdateKey) as? Date 
-        else { return }
          
-        guard date.timeIntervalSince(lastUpdateDate) < updateInterval,
-                let cachedImage = getCachedImage(key)
-        else {
-            completion(nil)
-            return
-        }
-        completion(.success(ShortImageData(title: key, image: cachedImage)))
+//        let cachedImage = getCachedImage(key)
+        
+//        completion(.success(ShortImageData(title: key, image: cachedImage)))
     }
 }
 
@@ -50,8 +43,14 @@ extension ImageCacheService: ImageCaching {
 
 extension ImageCacheService: ImageCachable {
     
-    func getCachedImage(_ key: String) -> UIImage? {
-        return imageCache.imageFromDiskCache(forKey: key)
+    func getCachedImage(_ id: Int, completion: @escaping (ShortImageData?) -> Void) {
+        let key = String(id)
+        
+        if let cashedImage = imageCache.imageFromDiskCache(forKey: key) {
+            completion((.init(title: String(id), image: cashedImage)))
+        } else {
+            completion(nil)
+        }
     }
     
     func saveImageToCache(_ image: UIImage,forKey key: String) {
@@ -82,7 +81,7 @@ extension ImageCacheService {
             
             self.userDefaults.set(self.date, forKey: self.lastUpdateKey)
             
-            completion(.success(ShortImageData(title: imageData.title, image: downloadedImage)))
+            completion(.success(.init(title: imageData.title, image: downloadedImage)))
         }
     }
 }

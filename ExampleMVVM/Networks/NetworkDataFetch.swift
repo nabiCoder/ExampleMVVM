@@ -5,8 +5,10 @@ final class NetworkDataFetch {
     
     private init() {}
     
-    func fetchImage(id: Int, responce: @escaping (Result<ImageData, NetworkError>) -> Void) {
-        NetworkRequest.shared.getData(id: id) { result in
+    private let networkRequest = NetworkRequest.shared
+    
+    func fetchImageData(id: Int, responce: @escaping (Result<ImageData, NetworkError>) -> Void) {
+        networkRequest.getData(id: id) { result in
             
             switch result {
             case .success(let data):
@@ -17,8 +19,18 @@ final class NetworkDataFetch {
                     responce(.failure(.canNotParseData))
                 }
                 
-            case .failure(_):
-                responce(.failure(.urlError))
+            case .failure(let error):
+                responce(.failure(error))
+            }
+        }
+    }
+    func loadImage(_ imageURL: String, comletionHandler: @escaping (Result<ShortImageData, NetworkError>) -> Void) {
+        networkRequest.getImage(imageURL) { result in
+            
+            if let result = result {
+                comletionHandler(.success(.init(title: "", image: result)))
+            } else {
+                comletionHandler(.failure(.errorDownloadingImage))
             }
         }
     }

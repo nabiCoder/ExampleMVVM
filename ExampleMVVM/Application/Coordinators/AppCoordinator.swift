@@ -11,13 +11,11 @@ final class AppCoordinator: CoordinatorProtocol {
     // MARK: - Initialization
     
     init(navigationController: UINavigationController, imageCacheService: ImageCacheService) {
-        
         self.navigationController = navigationController
         self.imageCacheService = imageCacheService
     }
     
     func start() {
-        
         showMainScreen()
     }
     

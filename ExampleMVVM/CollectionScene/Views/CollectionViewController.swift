@@ -62,6 +62,7 @@ final class CollectionViewController: UICollectionViewController, FlowController
             guard let self, let error else { return }
             
             DispatchQueue.main.async {
+                
                 self.errorAlertService.showAlert(on: self, with: error) { }
             }
         })

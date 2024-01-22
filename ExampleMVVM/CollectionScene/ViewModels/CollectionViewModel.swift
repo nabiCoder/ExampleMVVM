@@ -1,7 +1,6 @@
 import UIKit
 
 protocol CollectionDataProvider: AnyObject {
-    
     var dataSource: [ShortImageData]? { get set }
     var cellDataSource: Observable<[CellViewModel]> { get set }
     
@@ -10,21 +9,20 @@ protocol CollectionDataProvider: AnyObject {
 }
 
 protocol CollectionDataLoader: AnyObject {
-    
     var isLoading: Observable<Bool> { get set }
-    
     func fetchImages()
 }
 
 protocol CollectionViewModelProtocol: CollectionDataProvider, CollectionDataLoader {
-    
     var isError: Observable<NetworkError> { get set }
 }
 
 final class CollectionViewModel: CollectionViewModelProtocol {
     
-    private var imageCacheService: ImageCacheService
-    private var imageIdArray: [Int]?
+    private let imageCacheService: ImageCacheService
+    private let imageIdArray: [Int]?
+    private let placeholderImage = Resources.Images.noImage
+    private let networkDataFetch = NetworkDataFetch.shared
     
     // MARK: - Initialization
     
@@ -49,74 +47,74 @@ final class CollectionViewModel: CollectionViewModelProtocol {
     // MARK: - CollectionDataLoader
     
     func fetchImages() {
-        
-        isLoading.value = true
-        
         var images = [ShortImageData]()
         var fetchError: NetworkError?
-        let group = DispatchGroup()
-        let lock = NSLock()
+        let fetchGroup = DispatchGroup()
+        let cacheGroup = DispatchGroup()
+        
+        isLoading.value = true
+        cacheGroup.enter()
         
         imageIdArray?.forEach { id in
-            group.enter()
+            fetchGroup.enter()
             
-            imageCacheService.checkAndLoadImageForID(id) { [weak self] result in
-                guard let self = self else { return }
+            loadImageFromCacheOrNetwork(id: id) { result in
+                defer { fetchGroup.leave() }
                 
                 switch result {
-                case .success(let shortImageData):
-                    lock.withLock { images.append(shortImageData) }
-                    group.leave()
+                case .success(let image):
+                    images.append(image)
+                    self.imageCacheService.saveImageToCache(image.image, forKey: String(id))
                 case .failure(let error):
+                    images.append(.init(title: String(id), image: UIImage(named: self.placeholderImage)!))
                     fetchError = error
-                    group.leave()
-                case .none:
-                    self.fetchImageData(id: id) { imageResult in
-                        if let imageResult = imageResult {
-                            lock.withLock { images.append(imageResult) }
-                            self.imageCacheService.saveImageToCache(imageResult.image, forKey: String(id))
-                            group.leave()
-                        }
-                    }
                 }
             }
         }
-        group.notify(queue: .main) {
-            self.handleFetchCompletion(images: images, error: fetchError)
+        
+        fetchGroup.notify(queue: .main) {
+            cacheGroup.leave()
+            cacheGroup.notify(queue: .main) {
+                self.handleFetchCompletion(images: images, error: fetchError)
+            }
         }
     }
     
     // MARK: - Private Method
     
-    private func fetchImageData(id: Int, completion: @escaping (ShortImageData?) -> Void) {
-        NetworkDataFetch.shared.fetchImage(id: id) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let data):
-                self.imageCacheService.loadImageFromURL(data, String(id)) { imageResult in
-                    
-                    switch imageResult {
-                    case .success(let result):
-                        completion(result)
-                    case .failure(_):
-                        completion(nil)
+    private func loadImageFromCacheOrNetwork(id: Int, 
+                                             completion: @escaping (Result<ShortImageData, NetworkError>) -> Void) {
+        
+        imageCacheService.getCachedImage(id) { cachedResult in
+            if let cachedImage = cachedResult {
+                completion(.success(cachedImage))
+            } else {
+                self.networkDataFetch.fetchImageData(id: id) { [weak self] networkResult in
+                    guard let self = self else { return }
+                    switch networkResult {
+                    case .success(let networkImage):
+                        let imageURL = networkImage.url
+                        self.networkDataFetch.loadImage(imageURL) { result in
+                            switch result {
+                            case .success(let data):
+                                completion(.success(data))
+                            case .failure(let error):
+                                completion(.failure(error))
+                            }
+                        }
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
                 }
-            case .failure(_):
-                completion(nil)
             }
         }
     }
     
     private func handleFetchCompletion(images: [ShortImageData], error: NetworkError?) {
         isLoading.value = false
+        isError.value = error
         
-        if let error = error {
-            isError.value = error
-        } else {
-            dataSource = images
-            cellDataSource.value = images.compactMap({ CellViewModel($0) })
-        }
+        dataSource = images
+        cellDataSource.value = images.compactMap({ CellViewModel($0) })
     }
 }
