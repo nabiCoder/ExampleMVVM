@@ -24,6 +24,7 @@ final class NetworkDataFetch {
             }
         }
     }
+    
     func loadImage(_ imageURL: String, comletionHandler: @escaping (Result<ShortImageData, NetworkError>) -> Void) {
         networkRequest.getImage(imageURL) { result in
             
